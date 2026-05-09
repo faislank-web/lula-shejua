@@ -3,19 +3,21 @@ name: Dhisa Forwarder System
 on:
   schedule:
     - cron: '0 */6 * * *' # Otomatis jalan setiap 6 jam
-  workflow_dispatch:      # Tombol manual untuk menjalankan skrip kapan saja
+  workflow_dispatch:      # Tombol manual
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
-    # Memberi izin agar Dhisa bisa simpan progres ke last_id.txt
     permissions:
       contents: write
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          # Penting: Mengambil riwayat agar git push tidak error
+          fetch-depth: 0 
 
       - name: Set Up Python
         uses: actions/setup-python@v4
@@ -27,7 +29,6 @@ jobs:
           pip install telethon pytz
 
       - name: Run Dhisa Forwarder
-        # Bagian ini mengambil kunci dari brankas Secrets Bunda
         env:
           API_ID: ${{ secrets.API_ID }}
           API_HASH: ${{ secrets.API_HASH }}
@@ -36,8 +37,11 @@ jobs:
 
       - name: Simpan Progres (Update Last ID)
         run: |
+          # Memastikan file ada meskipun baru pertama kali jalan
+          touch last_id.txt 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add last_id.txt
-          git commit -m "Dhisa Update: Progres Terakhir [skip ci]" || echo "Tidak ada perubahan"
-          git push
+          # Menambahkan [skip ci] agar tidak terjadi perulangan workflow
+          git commit -m "Update Last ID: $(cat last_id.txt) [skip ci]" || echo "Tidak ada perubahan ID"
+          git push origin main
