@@ -2,7 +2,7 @@ name: Dhisa Forwarder System
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Otomatis jalan setiap 6 jam
+    - cron: '0 */2 * * *' # Otomatis jalan setiap 6 jam
   workflow_dispatch:      # Tombol manual
 
 jobs:
