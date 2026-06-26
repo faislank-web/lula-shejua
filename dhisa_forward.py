@@ -10,7 +10,7 @@ API_HASH = os.environ.get("API_HASH")
 RAW_SESSION = os.environ.get("SESSION_STRING")
 
 SUMBER = -1002186281759
-TUJUAN_1 = -1003633804963
+TUJUAN_1 = -1003839747899
 
 client = TelegramClient(StringSession(RAW_SESSION.strip()), API_ID, API_HASH, sequential_updates=True)
 
