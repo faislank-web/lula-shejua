@@ -36,7 +36,7 @@ def proses_teks_custom(teks):
         teks = re.sub(re.escape(lama), baru, teks, flags=re.IGNORECASE)
         
     # Mengubah Download Via menjadi tautan yang bisa diklik (Markdown style)
-    teks = re.sub(r'Download Via', 'Untuk Request [DISINI](https://t.me/+1UMfX90JEZ85MzI1)', teks, flags=re.IGNORECASE)
+    teks = re.sub(r'Download Via', 'Untuk #Request [DISINI](https://t.me/+1UMfX90JEZ85MzI1)', teks, flags=re.IGNORECASE)
     
     footer = "\n\nSELAMAT MENYAKSIKAN"
     return teks.strip() + footer
