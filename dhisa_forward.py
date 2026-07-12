@@ -11,6 +11,7 @@ RAW_SESSION = os.environ.get("SESSION_STRING")
 
 SUMBER = -1002186281759
 TUJUAN_1 = -1003839747899
+TUJUAN_2 = -1003767837442
 
 client = TelegramClient(StringSession(RAW_SESSION.strip()), API_ID, API_HASH, sequential_updates=True)
 
@@ -42,12 +43,12 @@ def proses_teks_custom(teks):
     return teks.strip() + footer
 
 async def main():
-    print("--- DHISA & ADMIN: MODE 1 TUJUAN AKTIF --- 🎀")
+    print("--- MODE 2 TUJUAN AKTIF --- 🎀")
     try:
         await client.connect()
         if not await client.is_user_authorized(): return
         
-        markup_1 = [Button.url("Channel Utama 💎", "https://t.me/shejua")]
+        markup = [Button.url("Channel Utama 💎", "https://t.me/shejua")]
         
         last_id = 0
         if os.path.exists("last_id.txt"):
@@ -70,15 +71,21 @@ async def main():
                 continue
             
             try:
-                # Kirim ke Tujuan 1 menggunakan parse_mode='md' agar tautan DISINI aktif
-                cap_1 = proses_teks_custom(msg.text) if msg.text else "Update Baru 🎬"
-                await client.send_message(TUJUAN_1, cap_1, file=msg.media, buttons=markup_1, parse_mode='md')
+                # Siapkan teks dengan format markdown yang sama
+                cap = proses_teks_custom(msg.text) if msg.text else "Update Baru 🎬"
                 
-                # Update ID hanya jika BERHASIL kirim media
+                # Kirim ke Tujuan 1
+                await client.send_message(TUJUAN_1, cap, file=msg.media, buttons=markup, parse_mode='md')
+                print(f"✅ Berhasil Kirim ID {msg.id} ke Tujuan 1")
+                
+                # Kirim ke Tujuan 2 dengan media dan tombol yang sama
+                await client.send_message(TUJUAN_2, cap, file=msg.media, buttons=markup, parse_mode='md')
+                print(f"✅ Berhasil Kirim ID {msg.id} ke Tujuan 2")
+                
+                # Update ID hanya jika BERHASIL kirim ke kedua tujuan
                 last_id = msg.id
                 with open("last_id.txt", "w") as f: f.write(str(last_id))
                 
-                print(f"✅ Berhasil Forward ID: {msg.id}")
                 await asyncio.sleep(5) 
                 
             except Exception as e:
